@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
+import "./PaymentPage.css";
+import { CardNumber, Cvv, ExpirationDate } from "./components";
+
 interface PaymentInfo {
   paymentId: string;
   amount: number;
@@ -62,47 +65,40 @@ function PaymentPage() {
   if (error) return <div style={{ color: "red", padding: 20 }}>{error}</div>;
   if (!amountRub) return <div>Загрузка...</div>;
 
+  const onSetCardData = () => {
+    setCardNumber("0000 0000 0000 0001");
+    setExpiry("12 / 32");
+    setCvv("777");
+  };
+
   return (
-    <div
-      style={{
-        maxWidth: 400,
-        margin: "50px auto",
-        padding: 20,
-        border: "1px solid #ccc",
-      }}
-    >
-      <h2>Оплата бронирования</h2>
-      <p>Сумма: {amountRub} ₽</p>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Номер карты:</label>
-          <input
+    <div className="PaymentPage_container">
+      <h2 className="PaymentPage_header"> Моковая система оплаты</h2>
+      <p className="PaymentPage_amount">Сумма: {amountRub} ₽</p>
+      <form className="PaymentPage_form" onSubmit={handleSubmit}>
+        <div className="PaymentPage_fields">
+          <CardNumber
+            label="Номер карты:"
             value={cardNumber}
-            onChange={(e) => setCardNumber(e.target.value)}
-            required
+            onChange={(val) => setCardNumber(val)}
           />
+          <div className="PaymentPage_subfields">
+            <ExpirationDate
+              label="Срок (MM/YY):"
+              value={expiry}
+              onChange={(val) => setExpiry(val)}
+            />
+            <Cvv label="CVV:" value={cvv} onChange={(val) => setCvv(val)} />
+          </div>
         </div>
-        <div>
-          <label>Срок (MM/YY):</label>
-          <input
-            value={expiry}
-            onChange={(e) => setExpiry(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>CVV:</label>
-          <input
-            value={cvv}
-            onChange={(e) => setCvv(e.target.value)}
-            required
-          />
-        </div>
+        <button type="button" disabled={processing} onClick={onSetCardData}>
+          {processing ? "Обработка..." : "Быстро подставить данные карты"}
+        </button>
         <button type="submit" disabled={processing}>
           {processing ? "Обработка..." : "Оплатить"}
         </button>
       </form>
-      <small>
+      <div className="info">
         Тестовые карты:
         <br />
         0000 0000 0000 0001 → Успех
@@ -110,7 +106,7 @@ function PaymentPage() {
         0000 0000 0000 0002 → Недостаточно средств
         <br />
         Любая другая → Ошибка
-      </small>
+      </div>
     </div>
   );
 }

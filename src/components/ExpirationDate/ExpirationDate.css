@@ -1,0 +1,16 @@
+.ExpirationDate_container {
+}
+
+.ExpirationDate_label {
+  font-size: 18px;
+  font-weight: bold;
+  color: rgb(163, 163, 163);
+  margin-bottom: 4px;
+}
+
+.ExpirationDate_inputWrapper {
+}
+
+.ExpirationDate_input {
+  width: 100%;
+}

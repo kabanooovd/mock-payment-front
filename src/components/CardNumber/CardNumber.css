@@ -1,0 +1,16 @@
+.CardNumber_container {
+}
+
+.CardNumber_label {
+  font-size: 18px;
+  font-weight: bold;
+  color: rgb(163, 163, 163);
+  margin-bottom: 4px;
+}
+
+.CardNumber_inputWrapper {
+}
+
+.CardNumber_input {
+  width: 100%;
+}
