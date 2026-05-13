@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import "./PaymentPage.css";
-import { CardNumber, Cvv, ExpirationDate } from "./components";
+import { CardNumber, Cvv, ExpirationDate } from "../../components";
 
 interface PaymentInfo {
   paymentId: string;
   amount: number;
 }
 
-function PaymentPage() {
+export const PaymentPage = () => {
   const [searchParams] = useSearchParams();
   const paymentId = searchParams.get("paymentId");
   const amount = searchParams.get("amount");
@@ -20,8 +20,10 @@ function PaymentPage() {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
 
+  
   useEffect(() => {
-    fetch(`/api/pay-info?paymentId=${paymentId}&amount=${amount}`)
+    const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+    fetch(`${API_BASE}api/pay-info?paymentId=${paymentId}&amount=${amount}`)
       .then((res) => {
         if (!res.ok) throw new Error("Network response was not ok");
         return res.json() as Promise<PaymentInfo>;
@@ -42,8 +44,9 @@ function PaymentPage() {
     e.preventDefault();
     setProcessing(true);
     setError("");
+    const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
     try {
-      const res = await fetch("/api/pay", {
+      const res = await fetch(`${API_BASE}api/pay`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ paymentId, cardNumber, expiry, cvv }),
@@ -110,5 +113,3 @@ function PaymentPage() {
     </div>
   );
 }
-
-export default PaymentPage;
